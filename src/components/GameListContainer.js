@@ -10,6 +10,7 @@ class GameListContainer extends React.Component {
 
   componentDidMount() {
     this.source.onmessage = (event) => {
+      console.log(event)
       const games = JSON.parse(event.data)
       this.props.allGames(games)
     }
