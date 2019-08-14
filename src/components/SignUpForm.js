@@ -1,12 +1,17 @@
 import React from 'react'
 
 export default function (props) {
-  const {onSubmit, onChangeEmail, onChangePassword} = props
+  const {onSubmit, onChangeName, onChangeEmail, onChangePassword} = props
 
  return <div>
-    <h3>Login Form</h3>
+    <h3>Sign Up Form</h3>
 
     <form onSubmit={onSubmit}>
+    <label>Name: </label>
+      <input
+        type='text'
+        onChange={onChangeName}
+      />
       <label>Email: </label>
       <input
         type='text'

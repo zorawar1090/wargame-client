@@ -1,12 +1,15 @@
 import React from 'react'
 import LoginForm from './LoginForm'
 import { Link } from 'react-router-dom'
+import {connect }from 'react-redux'
+import {setPlayer} from '../actions/player'
 
-export default class LoginFormContainer extends React.Component {
+class LoginFormContainer extends React.Component {
   state = { email: '', password: '' }
 
   onSubmit = (event) => {
     event.preventDefault()
+    this.props.setPlayer(this.state)
   }
 
   onChangeEmail = (event) => {
@@ -25,13 +28,16 @@ export default class LoginFormContainer extends React.Component {
     })
   }
 
-  onClick
-
   render() {
     return <div>
-      <LoginForm onChangeEmail={this.onChangeEmail} onChangePassword={this.onChangePassword} />
+      <LoginForm onSubmit={this.onSubmit} onChangeEmail={this.onChangeEmail} onChangePassword={this.onChangePassword} />
+      <p>Don't have an account? <Link to='/sign-up'>Sign Up</Link></p>
       <Link to={'/game-list'}>See Games</Link>
     </div>
   }
 }
+
+const mapDispatchToProps = {setPlayer}
+
+export default connect(null, mapDispatchToProps)(LoginFormContainer)
 

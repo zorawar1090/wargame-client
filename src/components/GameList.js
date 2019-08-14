@@ -15,7 +15,7 @@ export default function (props) {
         {availableGames.map((game, index) => {
           return (
             <li key={index}>
-              <Link to={`game/${game.name}`}>{game.name}</Link>
+              <Link to={`game/${game.id}`}>{game.name}</Link>
             </li>
           )
         })}

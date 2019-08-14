@@ -1,4 +1,4 @@
-import {JOIN_GAME} from '../actions/game'
+import {JOIN_GAME, SET_GAME, GET_GAME} from '../actions/game'
 
 export default function (state = {}, action = {}){
   switch(action.type){
