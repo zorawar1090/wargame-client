@@ -1,39 +1,16 @@
 import React from 'react'
 import LoginForm from './LoginForm'
-// import { login } from '../actions/login'
-
-// class LoginFormContainer extends React.Component {
-//   state = { email: '', password: '' }
-
-//   onSubmit = (event) => {
-//     event.preventDefault()
-//     this.props.login(this.state.email, this.state.password)
-//   }
-
-//   onChange = (event) => {
-//     this.setState({
-//       [event.target.name]: event.target.value
-//     })
-//   }
-
-//   render() {
-//     return <LoginForm
-//       onSubmit={this.onSubmit}
-//       onChange={this.onChange}
-//       values={this.state}
-//     />
-//   }
-// }
+import { Link } from 'react-router-dom'
 
 export default class LoginFormContainer extends React.Component {
-  state = {email: '', password: ''}
+  state = { email: '', password: '' }
 
   onSubmit = (event) => {
     event.preventDefault()
   }
 
   onChangeEmail = (event) => {
-    const {value} = event.target
+    const { value } = event.target
 
     this.setState({
       email: value,
@@ -41,15 +18,20 @@ export default class LoginFormContainer extends React.Component {
   }
 
   onChangePassword = (event) => {
-    const {value} = event.target
+    const { value } = event.target
 
     this.setState({
       password: value,
     })
   }
 
+  onClick
+
   render() {
-    return <LoginForm onChangeEmail={this.onChangeEmail} onChangePassword={this.onChangePassword}/>
+    return <div>
+      <LoginForm onChangeEmail={this.onChangeEmail} onChangePassword={this.onChangePassword} />
+      <Link to={'/game-list'}>See Games</Link>
+    </div>
   }
 }
 
