@@ -1,39 +1,29 @@
 import React from 'react'
 import LoginForm from './LoginForm'
-// import { login } from '../actions/login'
+import { Link } from 'react-router-dom'
+import { connect } from 'react-redux'
+import { resetPlayerId } from '../actions/game'
+import { verifyCredentials } from '../actions/login'
 
-// class LoginFormContainer extends React.Component {
-//   state = { email: '', password: '' }
+class LoginFormContainer extends React.Component {
+  state = { email: '', password: '', initialize: true }
 
-//   onSubmit = (event) => {
-//     event.preventDefault()
-//     this.props.login(this.state.email, this.state.password)
-//   }
+  componentDidMount() {
+    // if (this.state.initialize) {
+    //   console.log('Initializing card table')
+    //   this.props.resetPlayerId();
+    //   this.setState({ initialize: false })
+    // }
 
-//   onChange = (event) => {
-//     this.setState({
-//       [event.target.name]: event.target.value
-//     })
-//   }
-
-//   render() {
-//     return <LoginForm
-//       onSubmit={this.onSubmit}
-//       onChange={this.onChange}
-//       values={this.state}
-//     />
-//   }
-// }
-
-export default class LoginFormContainer extends React.Component {
-  state = {email: '', password: ''}
+  }
 
   onSubmit = (event) => {
     event.preventDefault()
+    this.props.verifyCredentials(this.state.email, this.state.password)
   }
 
   onChangeEmail = (event) => {
-    const {value} = event.target
+    const { value } = event.target
 
     this.setState({
       email: value,
@@ -41,15 +31,31 @@ export default class LoginFormContainer extends React.Component {
   }
 
   onChangePassword = (event) => {
-    const {value} = event.target
+    const { value } = event.target
 
     this.setState({
       password: value,
     })
   }
 
+
+
   render() {
-    return <LoginForm onChangeEmail={this.onChangeEmail} onChangePassword={this.onChangePassword}/>
+
+    return <div>
+      <LoginForm onSubmit={this.onSubmit} onChangeEmail={this.onChangeEmail} onChangePassword={this.onChangePassword} />
+      <p>Don't have an account? <Link to='/sign-up'>Sign Up</Link></p>
+      <Link to={'/game-list'}>See Games</Link>
+    </div>
   }
 }
+
+const mapStateToProps = state => {
+  console.log('state in login container', state)
+  return state
+}
+
+const mapDispatchToProps = { verifyCredentials }
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginFormContainer)
 

@@ -12,10 +12,10 @@ export default function (props) {
     const availableGames = gamelist.filter(game => game.status === 'joining')
     return (
       <ul>
-        {availableGames.map(game => {
+        {availableGames.map((game, index) => {
           return (
-            <li>
-              <Link to={`game/${game.name}`}>{game.name}</Link>
+            <li key={index}>
+              <Link to={`game/${game.id}`}>{game.name}</Link>
             </li>
           )
         })}
