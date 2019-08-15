@@ -22,7 +22,7 @@ class GameDetailsContainer extends React.Component {
     event.preventDefault()
     //await this.props.resetPlayerId()
     await this.props.joinGame(this.state.currentGame.id, this.props.currentPlayer)
-    await this.props.getCardsFromDb(this.props.currentPlayer.id)
+    // await this.props.getCardsFromDb(this.props.currentPlayer.id)
   }
 
 
