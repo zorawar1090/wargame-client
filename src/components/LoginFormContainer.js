@@ -6,7 +6,7 @@ import { resetPlayerId } from '../actions/game'
 import { verifyCredentials } from '../actions/login'
 
 class LoginFormContainer extends React.Component {
-  state = { email: '', password: '', initialize: true }
+  state = { email: '', password: '', initial: true, pwcheck: true }
 
   componentDidMount() {
     // if (this.state.initialize) {
@@ -17,9 +17,16 @@ class LoginFormContainer extends React.Component {
 
   }
 
-  onSubmit = (event) => {
+  onSubmit = async (event) => {
     event.preventDefault()
-    this.props.verifyCredentials(this.state.email, this.state.password)
+    await this.props.verifyCredentials(this.state.email, this.state.password)
+    console.log(this.props.player)
+    if (this.props.player.message === 'unverified') {
+      this.setState({ pwcheck: false, initial: false })
+    }
+    else {
+      this.setState({ pwcheck: true, initial: false })
+    }
   }
 
   onChangeEmail = (event) => {
@@ -38,14 +45,25 @@ class LoginFormContainer extends React.Component {
     })
   }
 
+  giveFeedback = () => {
+    if (this.state.pwcheck && !this.state.initial) {
+      return <div><div>Login successful.</div>
+        <br /><br />
+        <Link to={'/game-list'}>Click here to start playing</Link></div>
+    }
+    else if (!this.state.pwcheck && !this.state.initial) {
+      return <div>Incorrect credentials! Try again.</div>
+    }
+  }
 
 
   render() {
-
     return <div>
       <LoginForm onSubmit={this.onSubmit} onChangeEmail={this.onChangeEmail} onChangePassword={this.onChangePassword} />
-      <p>Don't have an account? <Link to='/sign-up'>Sign Up</Link></p>
-      <Link to={'/game-list'}>See Games</Link>
+      <p>Don't have an account? <Link to='/sign-up'>Sign up here</Link></p>
+      <br />
+      <div>{this.giveFeedback()}</div>
+
     </div>
   }
 }

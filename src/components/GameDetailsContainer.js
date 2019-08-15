@@ -3,6 +3,8 @@ import { joinGame, getCardsFromDb, leaveGame } from '../actions/game'
 import { connect } from 'react-redux'
 import { resetPlayerId } from '../actions/game'
 import GameDetails from './GameDetails'
+import GameListContainer from './GameListContainer'
+import { Link } from 'react-router-dom'
 
 class GameDetailsContainer extends React.Component {
   state = {
@@ -10,7 +12,8 @@ class GameDetailsContainer extends React.Component {
     cards: [],
     join: false,
     start: false,
-    noOfPlayers: 0
+    noOfPlayers: 0,
+    leavegame: false
   }
 
   componentDidMount() {
@@ -25,16 +28,7 @@ class GameDetailsContainer extends React.Component {
   onClickJoin = async (event) => {
     event.preventDefault()
     await this.props.joinGame(this.state.currentGame.id, this.props.currentPlayer)
-    this.setState({ join: true})
-
-    // if(this.state.noOfPlayers < 3){
-    //   this.state.noOfPlayers++
-    // }
-    // else{
-      
-    // }
-    
-
+    this.setState({ join: true })
     console.log('cards test', this.getCards())
   }
 
@@ -42,14 +36,16 @@ class GameDetailsContainer extends React.Component {
     event.preventDefault()
     console.log('currentplayer id:', this.props.currentPlayer.id)
     await this.props.leaveGame(this.props.currentPlayer.id)
+    //redirect user to game list page
+    this.props.history.push('/game-list');
   }
 
   onClickStart = () => {
-    this.setState({start: true, join: true})
+    this.setState({ start: true, join: true })
   }
 
   showGame = () => {
-    if(this.state.join === true && this.state.start === false){
+    if (this.state.join === true && this.state.start === false) {
       return <button onClick={this.onClickStart}>Start Game</button>
     }
   }
@@ -66,7 +62,7 @@ class GameDetailsContainer extends React.Component {
       {this.state.join ? null : <button onClick={this.onClickJoin}>Join Game</button>}
       {this.showGame()}
       <button onClick={this.onClickLeave}>Leave Game</button>
-      {this.state.start && this.state.join ?  <GameDetails player={this.props.currentPlayer} />: null }
+      {this.state.start && this.state.join ? <GameDetails player={this.props.currentPlayer} /> : null}
 
     </div>
   }
