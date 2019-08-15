@@ -51,7 +51,6 @@ class LoginFormContainer extends React.Component {
 }
 
 const mapStateToProps = state => {
-  console.log('state in login container', state)
   return state
 }
 

@@ -54,23 +54,25 @@ export const resetPlayerId = () => dispatch => {
 
 
 
-// export const GET_GAME = 'GET_GAME'
+export const LEAVE_GAME = 'LEAVE_GAME'
 
-// const getGameSuccess = game => {
-//   console.log('game', game)
-//   return ({
-//     type: GET_GAME,
-//     game
-//   })
-// }
+const leaveGameSuccess = () => {
+  return ({
+    type: LEAVE_GAME
+  })
+}
 
-// // export const getGame = () => {
-// //   console.log('inside getGame')
-// // }
 
-// export const getGame = gameId => dispatch => {
-
-// }
+export const leaveGame = playerId => dispatch => {
+  console.log('inside leaveGame')
+  request
+    .put(`http://localhost:4000/player/resetcards/${playerId}`)
+    .then(() => {
+      console.log('inside thennnnn ')
+      dispatch(leaveGameSuccess())
+    })
+    .catch(console.error)
+}
 
 // export const SET_GAME = 'SET_GAME'
 
