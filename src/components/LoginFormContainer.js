@@ -1,15 +1,25 @@
 import React from 'react'
 import LoginForm from './LoginForm'
 import { Link } from 'react-router-dom'
-import {connect }from 'react-redux'
-import {setPlayer} from '../actions/player'
+import { connect } from 'react-redux'
+import { resetPlayerId } from '../actions/game'
+import { verifyCredentials } from '../actions/login'
 
 class LoginFormContainer extends React.Component {
-  state = { email: '', password: '' }
+  state = { email: '', password: '', initialize: true }
+
+  componentDidMount() {
+    // if (this.state.initialize) {
+    //   console.log('Initializing card table')
+    //   this.props.resetPlayerId();
+    //   this.setState({ initialize: false })
+    // }
+
+  }
 
   onSubmit = (event) => {
     event.preventDefault()
-    this.props.setPlayer(this.state)
+    this.props.verifyCredentials(this.state.email, this.state.password)
   }
 
   onChangeEmail = (event) => {
@@ -28,7 +38,10 @@ class LoginFormContainer extends React.Component {
     })
   }
 
+
+
   render() {
+
     return <div>
       <LoginForm onSubmit={this.onSubmit} onChangeEmail={this.onChangeEmail} onChangePassword={this.onChangePassword} />
       <p>Don't have an account? <Link to='/sign-up'>Sign Up</Link></p>
@@ -37,7 +50,12 @@ class LoginFormContainer extends React.Component {
   }
 }
 
-const mapDispatchToProps = {setPlayer}
+const mapStateToProps = state => {
+  console.log('state in login container', state)
+  return state
+}
 
-export default connect(null, mapDispatchToProps)(LoginFormContainer)
+const mapDispatchToProps = { verifyCredentials }
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginFormContainer)
 
