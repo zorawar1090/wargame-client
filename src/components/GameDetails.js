@@ -1,8 +1,7 @@
 import React from 'react'
 
 export default function (props) {
-  const { player } = props
-  const { cardsImages } = props
+  const { player, cardsImages, onClickImage } = props
 
   console.log('card images', cardsImages)
 
@@ -15,8 +14,8 @@ export default function (props) {
     <br />
     <div className="s">
       {!cardsImages && "Loading..."}
-      {cardsImages.length > 0 && <img src={cardsImages[0].image} />}
-      {cardsImages.length > 0 && <img src={cardsImages[1].image} />}
+      {cardsImages.length > 0 && <img src={cardsImages[0].image} alt="card" onClick={() => onClickImage(cardsImages[0].id)}/>}
+      {cardsImages.length > 0 && <img src={cardsImages[1].image} alt="card" onClick={() => onClickImage(cardsImages[1].id)}/>}
     </div>
   </div>
 }

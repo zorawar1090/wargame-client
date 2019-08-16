@@ -50,6 +50,14 @@ class GameDetailsContainer extends React.Component {
     console.log('cards test', this.state.cards)
   }
 
+  onClickImage = async (cardId) => {
+    console.log('inside onclick image')
+    const game = this.getGame()
+    const startUrl = `${url}/play/${game.id}/${this.props.currentPlayer.id}/${cardId}`
+    const response = await request.put(startUrl)
+    console.log('Response test', response)
+  }
+
   showGame = () => {
     if (this.state.join === true && this.state.start === false) {
       return <button onClick={this.onClickStart}>Start Game</button>
@@ -74,8 +82,6 @@ class GameDetailsContainer extends React.Component {
     const game = this.getGame()
     await this.props.joinGame(game.id, this.props.currentPlayer)
     this.setState({ join: true })
-
-
   }
 
   render() {
@@ -92,7 +98,13 @@ class GameDetailsContainer extends React.Component {
       {this.showGame()}
       <button onClick={this.onClickLeave}>Leave Game</button>
 
-      {game ? <GameDetails player={currentPlayer} cardsImages={this.state.cards} /> : null}
+      {game
+        ? <GameDetails
+          player={currentPlayer}
+          cardsImages={this.state.cards}
+          onClickImage={this.onClickImage} 
+          /> 
+        : null}
       {/* {game ? <GameDetails player={currentPlayer} cardsImages={game.players.find(player = player.id === currentPlayer.id).cards} /> : null} */}
 
     </div>
