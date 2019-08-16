@@ -5,43 +5,47 @@ import { resetPlayerId } from '../actions/game'
 import GameDetails from './GameDetails'
 import GameListContainer from './GameListContainer'
 import { Link } from 'react-router-dom'
+import * as request from 'superagent'
+import { url } from '../constants'
 
 class GameDetailsContainer extends React.Component {
   state = {
-    currentGame: '',
-    cards: [{ id: 49, suit: 'HEARTS', image: 'https://deckofcardsapi.com/static/img/0H.png', value: '10' }, { id: 46, suit: 'HEARTS', image: 'https://deckofcardsapi.com/static/img/7H.png', value: '7' }],
+    //cards: [{ id: 49, suit: 'HEARTS', image: 'https://deckofcardsapi.com/static/img/0H.png', value: '10' }, { id: 46, suit: 'HEARTS', image: 'https://deckofcardsapi.com/static/img/7H.png', value: '7' }],
     join: false,
     start: false,
     noOfPlayers: 0,
-    leavegame: false
+    leavegame: false,
+    cards: []
   }
 
-  async componentDidMount() {
-    const games = this.props.games
-    const currentGame = await games.find(game => {
+  getGame() {
+    const { games } = this.props
+    const currentGame = games.find(game => {
       return game.id === parseInt(this.props.match.params.gameId)
     })
-    this.setState({ currentGame })
-    console.log('currentGame', currentGame)
+
+    return currentGame
   }
 
   onClickJoin = async (event) => {
     event.preventDefault()
-    await this.props.joinGame(this.state.currentGame.id, this.props.currentPlayer)
+    const game = this.getGame()
+    await this.props.joinGame(game.id, this.props.currentPlayer)
     this.setState({ join: true })
-    console.log('cards test', this.getCards())
   }
 
   onClickLeave = async (event) => {
     event.preventDefault()
-    console.log('currentplayer id:', this.props.currentPlayer.id)
     await this.props.leaveGame(this.props.currentPlayer.id)
     //redirect user to game list page
     this.props.history.push('/game-list');
   }
 
-  onClickStart = () => {
-    this.setState({ start: true, join: true })
+  onClickStart = async () => {
+    console.log('cards test', this.getCards())
+    const game = this.getGame()
+    const startUrl = `${url}/game/start/${game.id}`
+    const response = await request.put(startUrl)
   }
 
   showGame = () => {
@@ -49,21 +53,49 @@ class GameDetailsContainer extends React.Component {
       return <button onClick={this.onClickStart}>Start Game</button>
     }
   }
-  //cards = this.state.currentGame
 
   getCards() {
-    const players = this.state.currentGame.players//.players//.find(player => player.id === this.props.currentPlayer.id)
-    //const firstPlayer = players[0]//const player = players.find(player => player.id == this.props.currentPlayer.id)
-    return players
+    const game = this.getGame()
+    console.log('game inside get cards', game)
+    const { players } = game
+    const { currentPlayer } = this.props
+    console.log('players test:', players)
+    console.log('currentPlayer test:', currentPlayer)
+    const player = players.find(player => player.id === currentPlayer.id)
+    console.log('player test:', player)
+
+    return player.cards
+  }
+
+  onClickCards = async (event) => {
+    event.preventDefault()
+    const game = this.getGame()
+    await this.props.joinGame(game.id, this.props.currentPlayer)
+    this.setState({ join: true })
+    console.log('cards test', this.getCards())
+
   }
 
   render() {
+    //let cards = []
+    const { currentPlayer } = this.props
+    const game = this.getGame()
+    const inGame = game && game.players.find(player => player.id === currentPlayer.id)
+    const showJoin = game && game.status === 'joining' && !inGame
+    // if (game) {
+    //   cards = this.getCards()
+    // }
+
     return <div>
-      {this.state.currentGame ? <h2>Game room {this.state.currentGame.name}</h2> : null}
-      {this.state.join ? null : <button onClick={this.onClickJoin}>Join Game</button>}
+      {game ? <h2>Game room {game.name}</h2> : null}
+      {showJoin
+        ? <button onClick={this.onClickJoin}>Join Game</button>
+        : null
+      }
       {this.showGame()}
       <button onClick={this.onClickLeave}>Leave Game</button>
-      {this.state.start && this.state.join ? <GameDetails player={this.props.currentPlayer} /> : null}
+
+      {/* {game ? <GameDetails player={currentPlayer} cardsImages={game.players.find(player = player.id === currentPlayer.id).cards} /> : null} */} */}
 
     </div>
   }
@@ -72,6 +104,7 @@ class GameDetailsContainer extends React.Component {
 const mapDispatchToProps = { joinGame, getCardsFromDb, resetPlayerId, leaveGame }
 
 const mapStateToProps = state => {
+  console.log('state.game test:', state.games)
   return ({
     games: state.games,
     currentPlayer: state.player,
