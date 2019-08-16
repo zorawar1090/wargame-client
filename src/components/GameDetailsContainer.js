@@ -9,16 +9,16 @@ import { Link } from 'react-router-dom'
 class GameDetailsContainer extends React.Component {
   state = {
     currentGame: '',
-    cards: [],
+    cards: [{ id: 49, suit: 'HEARTS', image: 'https://deckofcardsapi.com/static/img/0H.png', value: '10' }, { id: 46, suit: 'HEARTS', image: 'https://deckofcardsapi.com/static/img/7H.png', value: '7' }],
     join: false,
     start: false,
     noOfPlayers: 0,
     leavegame: false
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const games = this.props.games
-    const currentGame = games.find(game => {
+    const currentGame = await games.find(game => {
       return game.id === parseInt(this.props.match.params.gameId)
     })
     this.setState({ currentGame })
@@ -49,7 +49,7 @@ class GameDetailsContainer extends React.Component {
       return <button onClick={this.onClickStart}>Start Game</button>
     }
   }
-  cards = this.state.currentGame
+  //cards = this.state.currentGame
 
   getCards() {
     const players = this.state.currentGame.players//.players//.find(player => player.id === this.props.currentPlayer.id)
@@ -59,6 +59,7 @@ class GameDetailsContainer extends React.Component {
 
   render() {
     return <div>
+      {this.state.currentGame ? <h2>Game room {this.state.currentGame.name}</h2> : null}
       {this.state.join ? null : <button onClick={this.onClickJoin}>Join Game</button>}
       {this.showGame()}
       <button onClick={this.onClickLeave}>Leave Game</button>

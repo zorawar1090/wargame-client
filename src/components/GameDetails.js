@@ -1,7 +1,8 @@
 import React from 'react'
 
-export default function(props){
-  const {player} = props
+export default function (props) {
+  const { player } = props
+  const { game } = props
   return <div>
     <h2>Player {player.name} ready!</h2>
     <ul>
