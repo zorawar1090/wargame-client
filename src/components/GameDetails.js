@@ -9,12 +9,14 @@ export default function (props) {
   return <div>
     <h2>Player {player.name} ready!</h2>
     <ul>
-      <li>Points: {player.points}</li>
+      <li>Points: {player.points}  Cards remaining: {cardsImages.length}</li>
     </ul>
+    <h3>Choose a card to play</h3>
+    <br />
     <div className="s">
       {!cardsImages && "Loading..."}
-      {cardsImages &&
-        cardsImages.map((image, i) => <img src={image} alt="Card" key={i} />)}
+      {cardsImages.length > 0 && <img src={cardsImages[0].image} />}
+      {cardsImages.length > 0 && <img src={cardsImages[1].image} />}
     </div>
   </div>
 }

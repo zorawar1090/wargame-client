@@ -42,10 +42,12 @@ class GameDetailsContainer extends React.Component {
   }
 
   onClickStart = async () => {
-    console.log('cards test', this.getCards())
+    //console.log('cards test', this.getCards())
     const game = this.getGame()
     const startUrl = `${url}/game/start/${game.id}`
     const response = await request.put(startUrl)
+    this.setState({ cards: this.getCards() })
+    console.log('cards test', this.state.cards)
   }
 
   showGame = () => {
@@ -72,20 +74,15 @@ class GameDetailsContainer extends React.Component {
     const game = this.getGame()
     await this.props.joinGame(game.id, this.props.currentPlayer)
     this.setState({ join: true })
-    console.log('cards test', this.getCards())
+
 
   }
 
   render() {
-    //let cards = []
     const { currentPlayer } = this.props
     const game = this.getGame()
     const inGame = game && game.players.find(player => player.id === currentPlayer.id)
     const showJoin = game && game.status === 'joining' && !inGame
-    // if (game) {
-    //   cards = this.getCards()
-    // }
-
     return <div>
       {game ? <h2>Game room {game.name}</h2> : null}
       {showJoin
@@ -95,7 +92,8 @@ class GameDetailsContainer extends React.Component {
       {this.showGame()}
       <button onClick={this.onClickLeave}>Leave Game</button>
 
-      {/* {game ? <GameDetails player={currentPlayer} cardsImages={game.players.find(player = player.id === currentPlayer.id).cards} /> : null} */} */}
+      {game ? <GameDetails player={currentPlayer} cardsImages={this.state.cards} /> : null}
+      {/* {game ? <GameDetails player={currentPlayer} cardsImages={game.players.find(player = player.id === currentPlayer.id).cards} /> : null} */}
 
     </div>
   }
